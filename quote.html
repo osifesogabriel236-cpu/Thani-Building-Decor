@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Get a Quote | Thani Building Decor</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#111;
+  color:#fff;
+  line-height:1.6;
+}
+
+.container{
+  width:min(720px,92%);
+  margin:auto;
+  padding:30px 0 60px;
+}
+
+.top{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.logo{
+  font-size:28px;
+  font-weight:800;
+}
+
+.gold{
+  color:#d7a84a;
+}
+
+.top p{
+  opacity:.8;
+}
+
+.card{
+  background:#1b1b1b;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 10px 35px rgba(0,0,0,.25);
+}
+
+h1{
+  margin-top:0;
+  text-align:center;
+}
+
+label{
+  display:block;
+  margin:17px 0 7px;
+  font-weight:700;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #444;
+  background:#101010;
+  color:#fff;
+  font-size:16px;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+button{
+  width:100%;
+  margin-top:25px;
+  padding:16px;
+  border:0;
+  border-radius:12px;
+  background:#d7a84a;
+  color:#111;
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+.note{
+  font-size:13px;
+  opacity:.7;
+  margin-top:10px;
+}
+
+.back{
+  display:block;
+  text-align:center;
+  margin-top:20px;
+  color:#d7a84a;
+  text-decoration:none;
+}
+
+.success{
+  display:none;
+  margin-top:20px;
+  padding:16px;
+  border-radius:12px;
+  background:#17351f;
+  border:1px solid #2d7941;
+}
+
+ul{
+  padding-left:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="top">
+    <div class="logo">
+      Thani <span class="gold">Building Decor</span>
+    </div>
+    <p>Professional Interior & Exterior Decoration</p>
+  </div>
+
+  <div class="card">
+
+    <h1>Get a Quote</h1>
+
+    <p>
+      Tell us about your project and we'll review your request.
+      For the most accurate quotation, please provide as much information as possible.
+    </p>
+
+    <form id="quoteForm">
+
+      <label for="name">Full Name *</label>
+      <input id="name" type="text" placeholder="Your name" required>
+
+      <label for="phone">WhatsApp Number *</label>
+      <input id="phone" type="tel" placeholder="e.g. 08012345678" required>
+
+      <label for="service">Service Needed *</label>
+      <select id="service" required>
+        <option value="">Select a service</option>
+        <option>Painting</option>
+        <option>Screeding</option>
+        <option>Wallpaper Installation</option>
+        <option>Fluted Panel Installation</option>
+        <option>Vinyl / SPC Flooring</option>
+        <option>3D Wall Panels</option>
+        <option>POP Designs</option>
+        <option>Decorative Wall Designs</option>
+        <option>Marble Boards</option>
+        <option>Decorative Painting</option>
+        <option>Window Blinds</option>
+        <option>Decorative Curtains</option>
+        <option>Full Interior Decoration</option>
+        <option>Exterior Decoration</option>
+        <option>Other</option>
+      </select>
+
+      <label for="location">Project Location *</label>
+      <input id="location" type="text" placeholder="Area / City" required>
+
+      <label for="size">Approximate Project Size</label>
+      <input id="size" type="text" placeholder="e.g. 2-bedroom flat, 4 windows, 30m²">
+
+      <label for="date">Preferred Project Date</label>
+      <input id="date" type="date">
+
+      <label for="details">Tell Us About Your Project *</label>
+      <textarea id="details" placeholder="Describe what you want done..." required></textarea>
+
+      <label for="budget">Estimated Budget (Optional)</label>
+      <input id="budget" type="text" placeholder="e.g. ₦500,000">
+
+      <label for="photos">Project Photos</label>
+      <input id="photos" type="file" accept="image/*" multiple>
+
+      <p class="note">
+        After sending your enquiry, you can send the project photos directly on WhatsApp.
+      </p>
+
+      <button type="submit">
+        💬 Send Quote Request on WhatsApp
+      </button>
+
+    </form>
+
+    <div class="success" id="success">
+      Your enquiry has been prepared. WhatsApp should open shortly.
+    </div>
+
+  </div>
+
+  <a class="back" href="index.html">← Back to Thani Building Decor</a>
+
+</div>
+
+<script>
+document.getElementById("quoteForm").addEventListener("submit", function(e){
+
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const service = document.getElementById("service").value;
+  const location = document.getElementById("location").value.trim();
+  const size = document.getElementById("size").value.trim();
+  const date = document.getElementById("date").value;
+  const details = document.getElementById("details").value.trim();
+  const budget = document.getElementById("budget").value.trim();
+  const photos = document.getElementById("photos").files.length;
+
+  let message =
+`Hello Thani Building Decor 👋
+
+I'd like to request a quotation.
+
+CUSTOMER DETAILS
+Name: ${name}
+WhatsApp: ${phone}
+
+PROJECT DETAILS
+Service: ${service}
+Location: ${location}
+Approximate size: ${size || "Not provided"}
+Preferred date: ${date || "Not provided"}
+
+Project description:
+${details}
+
+Estimated budget:
+${budget || "Not provided"}
+
+Project photos: ${photos > 0 ? photos + " photo(s) selected — I will send them on WhatsApp." : "None selected"}
+
+Thank you.`;
+
+  const whatsappNumber = "2348090846585";
+
+  document.getElementById("success").style.display = "block";
+
+  window.location.href =
+    "https://wa.me/" + whatsappNumber + "?text=" +
+    encodeURIComponent(message);
+
+});
+</script>
+
+</body>
+  </html>
