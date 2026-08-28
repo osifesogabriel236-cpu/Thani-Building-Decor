@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quotation Builder | Thani Building Decor</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#111;
+  color:#fff;
+  line-height:1.5;
+}
+
+.container{
+  width:min(800px,94%);
+  margin:auto;
+  padding:25px 0 50px;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.logo{
+  font-size:27px;
+  font-weight:800;
+}
+
+.gold{color:#d7a84a}
+
+.card{
+  background:#1b1b1b;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:18px;
+}
+
+h1,h2{margin-top:0}
+
+label{
+  display:block;
+  font-weight:700;
+  margin:13px 0 6px;
+}
+
+input,textarea{
+  width:100%;
+  padding:13px;
+  border-radius:9px;
+  border:1px solid #444;
+  background:#101010;
+  color:#fff;
+  font-size:15px;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.item{
+  border:1px solid #444;
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:12px;
+  background:#151515;
+}
+
+.item-grid{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr auto;
+  gap:10px;
+  align-items:end;
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:13px 17px;
+  font-weight:800;
+  cursor:pointer;
+  font-size:15px;
+}
+
+.add{
+  background:#333;
+  color:#fff;
+}
+
+.remove{
+  background:#6b2525;
+  color:#fff;
+}
+
+.primary{
+  width:100%;
+  margin-top:15px;
+  background:#d7a84a;
+  color:#111;
+}
+
+.whatsapp{
+  width:100%;
+  margin-top:10px;
+  background:#25D366;
+  color:#fff;
+}
+
+.total{
+  text-align:right;
+  font-size:24px;
+  font-weight:900;
+  margin-top:18px;
+}
+
+.quote-preview{
+  white-space:pre-wrap;
+  background:#101010;
+  padding:15px;
+  border-radius:10px;
+  border:1px solid #333;
+  font-size:14px;
+}
+
+.note{
+  opacity:.7;
+  font-size:13px;
+}
+
+.back{
+  display:block;
+  text-align:center;
+  color:#d7a84a;
+  text-decoration:none;
+  margin-top:18px;
+}
+
+@media(max-width:600px){
+  .item-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .item-grid .name{
+    grid-column:1/-1;
+  }
+
+  .remove{
+    grid-column:1/-1;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">
+      Thani <span class="gold">Building Decor</span>
+    </div>
+    <p>Private Quotation Builder</p>
+  </div>
+
+  <div class="card">
+
+    <h2>Customer Details</h2>
+
+    <label>Customer Name</label>
+    <input id="customerName" type="text" placeholder="Customer's name">
+
+    <label>WhatsApp Number</label>
+    <input id="customerPhone" type="tel" placeholder="e.g. 08012345678">
+
+    <label>Project Location</label>
+    <input id="projectLocation" type="text" placeholder="Area / City">
+
+    <label>Project Notes</label>
+    <textarea id="projectNotes" placeholder="Additional information about the project..."></textarea>
+
+  </div>
+
+  <div class="card">
+
+    <h2>Quotation Items</h2>
+
+    <div id="items"></div>
+
+    <button class="add" onclick="addItem()">
+      + Add Service / Item
+    </button>
+
+    <div class="total">
+      Total: ₦<span id="total">0</span>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <h2>Quotation Message</h2>
+
+    <p class="note">
+      Review the quotation before sending it to the customer.
+    </p>
+
+    <div class="quote-preview" id="preview">
+      Add customer details and quotation items to generate the quotation.
+    </div>
+
+    <button class="primary" onclick="generateQuote()">
+      🧾 Generate Quotation
+    </button>
+
+    <button class="whatsapp" onclick="sendWhatsApp()">
+      💬 Send Quotation on WhatsApp
+    </button>
+
+  </div>
+
+  <a class="back" href="index.html">
+    ← Back to Thani Building Decor
+  </a>
+
+</div>
+
+<script>
+
+let itemCount = 0;
+
+function addItem(){
+
+  itemCount++;
+
+  const div = document.createElement("div");
+
+  div.className = "item";
+
+  div.id = "item-" + itemCount;
+
+  div.innerHTML = `
+    <div class="item-grid">
+
+      <div class="name">
+        <label>Service / Item</label>
+        <input
+          class="item-name"
+          type="text"
+          placeholder="e.g. Painting"
+          oninput="calculate()"
+        >
+      </div>
+
+      <div>
+        <label>Quantity</label>
+        <input
+          class="item-qty"
+          type="number"
+          min="0"
+          value="1"
+          oninput="calculate()"
+        >
+      </div>
+
+      <div>
+        <label>Price (₦)</label>
+        <input
+          class="item-price"
+          type="number"
+          min="0"
+          value="0"
+          oninput="calculate()"
+        >
+      </div>
+
+      <button
+        class="remove"
+        onclick="removeItem(${itemCount})">
+        Remove
+      </button>
+
+    </div>
+  `;
+
+  document.getElementById("items").appendChild(div);
+
+  calculate();
+}
+
+function removeItem(id){
+
+  const item = document.getElementById("item-" + id);
+
+  if(item){
+    item.remove();
+  }
+
+  calculate();
+}
+
+function calculate(){
+
+  let total = 0;
+
+  document.querySelectorAll(".item").forEach(item => {
+
+    const qty =
+      Number(item.querySelector(".item-qty").value) || 0;
+
+    const price =
+      Number(item.querySelector(".item-price").value) || 0;
+
+    total += qty * price;
+
+  });
+
+  document.getElementById("total").textContent =
+    total.toLocaleString("en-NG");
+
+}
+
+function getItems(){
+
+  const items = [];
+
+  document.querySelectorAll(".item").forEach(item => {
+
+    const name =
+      item.querySelector(".item-name").value.trim();
+
+    const qty =
+      Number(item.querySelector(".item-qty").value) || 0;
+
+    const price =
+      Number(item.querySelector(".item-price").value) || 0;
+
+    if(name){
+
+      items.push({
+        name:name,
+        qty:qty,
+        price:price,
+        subtotal:qty * price
+      });
+
+    }
+
+  });
+
+  return items;
+}
+
+function generateQuote(){
+
+  const name =
+    document.getElementById("customerName").value.trim();
+
+  const phone =
+    document.getElementById("customerPhone").value.trim();
+
+  const location =
+    document.getElementById("projectLocation").value.trim();
+
+  const notes =
+    document.getElementById("projectNotes").value.trim();
+
+  const items = getItems();
+
+  let total = 0;
+
+  items.forEach(item => {
+    total += item.subtotal;
+  });
+
+  let message =
+`THANI BUILDING DECOR
+
+QUOTATION
+
+Customer: ${name || "Not provided"}
+WhatsApp: ${phone || "Not provided"}
+Location: ${location || "Not provided"}
+
+SERVICES / ITEMS
+`;
+
+  items.forEach((item,index) => {
+
+    message +=
+`\n${index + 1}. ${item.name}
+Quantity: ${item.qty}
+Unit Price: ₦${item.price.toLocaleString("en-NG")}
+Subtotal: ₦${item.subtotal.toLocaleString("en-NG")}
+`;
+
+  });
+
+  message +=
+`\nTOTAL: ₦${total.toLocaleString("en-NG")}`;
+
+  if(notes){
+    message +=
+`\n\nPROJECT NOTES:
+${notes}`;
+  }
+
+  message +=
+`\n\nThank you for choosing Thani Building Decor.
+We deliver to get another job and referral.`;
+
+  document.getElementById("preview").textContent = message;
+
+  calculate();
+}
+
+function sendWhatsApp(){
+
+  const name =
+    document.getElementById("customerName").value.trim();
+
+  const phone =
+    document.getElementById("customerPhone").value.trim();
+
+  const location =
+    document.getElementById("projectLocation").value.trim();
+
+  const notes =
+    document.getElementById("projectNotes").value.trim();
+
+  const items = getItems();
+
+  if(items.length === 0){
+
+    alert("Please add at least one service or item.");
+
+    return;
+  }
+
+  let total = 0;
+
+  let message =
+`Hello ${name || "there"} 👋
+
+Thank you for contacting Thani Building Decor.
+
+Here is your quotation:
+
+`;
+
+  items.forEach((item,index) => {
+
+    total += item.subtotal;
+
+    message +=
+`${index + 1}. ${item.name}
+Quantity: ${item.qty}
+Unit Price: ₦${item.price.toLocaleString("en-NG")}
+Subtotal: ₦${item.subtotal.toLocaleString("en-NG")}
+
+`;
+
+  });
+
+  message +=
+`TOTAL: ₦${total.toLocaleString("en-NG")}`;
+
+  if(location){
+    message +=
+`\n\nProject Location: ${location}`;
+  }
+
+  if(notes){
+    message +=
+`\n\nProject Notes:
+${notes}`;
+  }
+
+  message +=
+`
+
+Thank you for choosing Thani Building Decor.
+We deliver to get another job and referral.`;
+
+  const customerNumber =
+    phone.replace(/\D/g,"");
+
+  if(customerNumber){
+
+    const internationalNumber =
+      customerNumber.startsWith("0")
+      ? "234" + customerNumber.substring(1)
+      : customerNumber;
+
+    window.open(
+      "https://wa.me/" +
+      internationalNumber +
+      "?text=" +
+      encodeURIComponent(message),
+      "_blank"
+    );
+
+  }else{
+
+    alert(
+      "Please enter the customer's WhatsApp number first."
+    );
+
+  }
+
+}
+
+addItem();
+
+</script>
+
+</body>
+  </html>
