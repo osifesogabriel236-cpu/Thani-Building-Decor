@@ -35,7 +35,7 @@
   <script src="supabase-config.js"></script>
 
   <script>
-    const supabaseClient = supabase.createClient(
+    const supabaseClient = window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
     );
